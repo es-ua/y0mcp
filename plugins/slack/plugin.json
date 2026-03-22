@@ -1,0 +1,18 @@
+{
+  "name": "slack",
+  "version": "0.1.0",
+  "description": "Slack channel plugin for Claude Code with permission relay and token refresh",
+  "author": { "name": "y0mcp", "url": "https://github.com/es-ua/y0mcp" },
+  "runtime": "bun",
+  "main": "server.ts",
+  "channel": true,
+  "configuration": {
+    "SLACK_BOT_TOKEN":    { "required": true,  "secret": true },
+    "SLACK_APP_TOKEN":    { "required": true,  "secret": true },
+    "SLACK_CHANNEL_ID":   { "required": true  },
+    "SLACK_CHANNEL_NAME": { "required": false },
+    "AGENT_NAME":         { "required": false },
+    "DOZZLE_URL":         { "required": false },
+    "DOZZLE_TOKEN":       { "required": false, "secret": true }
+  }
+}

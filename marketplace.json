@@ -1,0 +1,22 @@
+{
+  "name": "y0mcp",
+  "owner": {
+    "name": "y0mcp",
+    "url": "https://github.com/es-ua/y0mcp"
+  },
+  "description": "Slack channel plugin for Claude Code. Multi-project, permission relay, always-on.",
+  "plugins": [
+    {
+      "name": "slack",
+      "description": "Connect Claude Code to Slack. Permission relay, Dozzle logs, token refresh.",
+      "category": "communication",
+      "tags": ["slack", "channels", "multi-project", "devops", "permissions"],
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/es-ua/y0mcp.git",
+        "ref": "main",
+        "path": "plugins/slack"
+      }
+    }
+  ]
+}

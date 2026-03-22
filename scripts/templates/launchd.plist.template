@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>dev.y0mcp.{{AGENT_NAME}}</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-c</string>
+    <string>source {{ENV_FILE}} && cd {{WORKSPACE_PATH}} && claude --dangerously-load-development-channels --channels plugin:slack@y0mcp</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>{{WORKSPACE_PATH}}</string>
+
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>{{HOME}}/.y0mcp/{{AGENT_NAME}}.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>{{HOME}}/.y0mcp/{{AGENT_NAME}}.err</string>
+
+  <key>ThrottleInterval</key>
+  <integer>30</integer>
+</dict>
+</plist>
