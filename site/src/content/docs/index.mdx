@@ -1,0 +1,60 @@
+---
+title: y0mcp
+description: Control your dev projects from Slack using your claude.ai subscription.
+template: splash
+hero:
+  tagline: Multi-project routing. Permission relay. Always-on. No API key required — works with claude.ai Pro/Max.
+  actions:
+    - text: Get Started
+      link: /guides/quickstart/
+      icon: right-arrow
+      variant: primary
+    - text: GitHub
+      link: https://github.com/es-ua/y0mcp
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## How it works
+
+```
+You → Slack #project-a → y0mcp → Claude Code in ~/projects/project-a
+                               ↕ permission relay (✅/❌ in Slack)
+                               → Dozzle API (optional)
+```
+
+## Why y0mcp
+
+| | OpenClaw | Claude Code Channels | y0mcp |
+|---|---|---|---|
+| Slack | ✓ | ✗ | **✓** |
+| Multi-project routing | ✓ | ✗ | **✓** |
+| Permission relay in Slack | ✗ | ✗ | **✓** |
+| claude.ai subscription | ✗ | ✓ | **✓** |
+| API key required | ✓ | ✗ | **✗** |
+| Auto token refresh | ✗ | ✗ | **✓** |
+| Always-on (launchd/systemd) | ✗ | ✗ | **✓** |
+
+## Get started in minutes
+
+```bash
+git clone https://github.com/es-ua/y0mcp
+cd y0mcp && bash scripts/install.sh
+bash scripts/new-agent.sh
+```
+
+<CardGrid>
+  <Card title="Slack-native" icon="comment">
+    One agent per project. Each agent listens to its own Slack channel. Switch between projects by switching channels.
+  </Card>
+  <Card title="Permission relay" icon="approve-check">
+    Claude asks before risky actions. Approve or deny with a reaction directly in Slack — no terminal needed.
+  </Card>
+  <Card title="Always-on" icon="rocket">
+    Agents run as launchd/systemd services. Auto-restart on crash. OAuth tokens refresh automatically every 2 hours.
+  </Card>
+  <Card title="Container logs" icon="document">
+    Optional Dozzle integration for fetching container logs through Claude Code.
+  </Card>
+</CardGrid>

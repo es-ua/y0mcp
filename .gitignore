@@ -1,0 +1,14 @@
+.env
+*.env
+.claude/
+access.json
+node_modules/
+dist/
+.cache/
+.DS_Store
+*.log
+*.lock
+site/node_modules/
+site/dist/
+site/.astro/
+agents/

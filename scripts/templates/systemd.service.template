@@ -1,0 +1,14 @@
+[Unit]
+Description=y0mcp agent: {{AGENT_NAME}}
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory={{WORKSPACE_PATH}}
+EnvironmentFile={{ENV_FILE}}
+ExecStart={{CLAUDE_PATH}} --dangerously-load-development-channels --channels plugin:slack@y0mcp
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target
