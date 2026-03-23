@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
-import { Server } from '@modelcontextprotocol/sdk/server/index.js'
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import bolt from '@slack/bolt'
 const { App } = bolt
@@ -48,7 +48,7 @@ for (const key of ['SLACK_BOT_TOKEN', 'SLACK_APP_TOKEN', 'SLACK_CHANNEL_ID']) {
   }
 }
 
-const server = new Server(
+const server = new McpServer(
   { name: 'y0mcp-slack', version: '0.1.0' },
   {
     capabilities: {
@@ -111,8 +111,8 @@ app.message(async ({ message }) => {
     channel: CHANNEL_ID, timestamp: ts, name: 'thinking_face'
   }).catch(() => {})
 
-  // forward to Claude Code
-  await server.notification({
+  // forward to Claude Code via low-level server
+  await server.server.notification({
     method: 'notifications/claude/channel',
     params: {
       content: `<channel source="slack" sender="${userId}" channel="${CHANNEL_ID}" ts="${ts}">${text}</channel>`,
