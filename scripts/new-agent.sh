@@ -10,9 +10,10 @@ echo "╚═══════════════════════�
 echo ""
 
 # helper: show value, confirm or override
+# UI output goes to stderr, only the result goes to stdout
 confirm() {
   local label="$1" default="$2"
-  echo "$label: $default"
+  echo "$label: $default" >&2
   read -p "  Confirm? [Y/n]: " answer
   if [[ "$answer" =~ ^[Nn] ]]; then
     read -p "  Enter new value: " new_value
