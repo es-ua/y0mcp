@@ -1,5 +1,8 @@
 {
   "buildCommand": "cd site && npm install && npm run build",
   "outputDirectory": "site/dist",
-  "framework": "astro"
+  "framework": "astro",
+  "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/sitemap-index.xml" }
+  ]
 }
