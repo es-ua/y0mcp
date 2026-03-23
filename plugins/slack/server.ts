@@ -286,5 +286,28 @@ process.on('uncaughtException', async (err) => {
   process.exit(1)
 })
 
-const transport = new StdioServerTransport()
-await server.connect(transport)
+// Standalone mode: read /pair commands from stdin when not connected to Claude Code
+// In Claude Code mode, the pair tool handles this instead
+if (process.env.Y0MCP_STANDALONE) {
+  const readline = await import('readline')
+  const rl = readline.createInterface({ input: process.stdin })
+  rl.on('line', async (line: string) => {
+    const match = line.trim().match(/^\/pair\s+(\S+)$/i)
+    if (match) {
+      const userId = await addToAllowlist(match[1].toUpperCase())
+      if (userId) {
+        await app.client.chat.postMessage({
+          channel: CHANNEL_ID,
+          text: `✅ <@${userId}> paired successfully!`
+        })
+        log(`✅ Paired user ${userId}`)
+      } else {
+        log(`Invalid or expired pairing code: ${match[1]}`)
+      }
+    }
+  })
+  log('Standalone mode — type /pair CODE to pair')
+} else {
+  const transport = new StdioServerTransport()
+  await server.connect(transport)
+}
