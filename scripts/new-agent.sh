@@ -41,12 +41,8 @@ fi
 
 # --- Only ask for values not already in .env ---
 
-if is_set "${WORKSPACE_PATH:-}"; then
-  echo "Project path: $WORKSPACE_PATH (from .env)"
-else
-  WORKSPACE_PATH="$(confirm "Project path" "$DEFAULT_PATH")"
-  WORKSPACE_PATH="${WORKSPACE_PATH/#\~/$HOME}"
-fi
+WORKSPACE_PATH="$(confirm "Project path" "$DEFAULT_PATH")"
+WORKSPACE_PATH="${WORKSPACE_PATH/#\~/$HOME}"
 
 if is_set "${AGENT_NAME:-}"; then
   echo "Agent name: $AGENT_NAME (from .env)"
