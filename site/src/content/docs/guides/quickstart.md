@@ -6,7 +6,7 @@ description: Get y0mcp up and running in minutes.
 ## Prerequisites
 
 - macOS or Linux
-- [Claude Code CLI](https://claude.ai) installed and logged in
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code/overview) installed and logged in (`npm install -g @anthropic-ai/claude-code`)
 - claude.ai Pro or Max subscription
 - Slack workspace with admin access
 
