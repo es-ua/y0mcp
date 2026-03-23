@@ -55,7 +55,7 @@ y0slack решает все четыре проблемы.
 │       предотвращает race condition при нескольких агентах
 │
 ├── launchd/systemd: y0mcp-project-a
-│   claude --channels plugin:slack@y0mcp
+│   claude --channels plugin:y0slack@y0mcp
 │   в директории ~/projects/project-a
 │   └── Slack #project-a
 │       ├── команды → Claude Code
@@ -857,7 +857,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   <array>
     <string>/bin/bash</string>
     <string>-c</string>
-    <string>source ${ENV_FILE} && cd ${WORKSPACE_PATH} && claude --dangerously-load-development-channels --channels plugin:slack@y0mcp</string>
+    <string>source ${ENV_FILE} && cd ${WORKSPACE_PATH} && claude --dangerously-load-development-channels --channels plugin:y0slack@y0mcp</string>
   </array>
 
   <key>WorkingDirectory</key>
@@ -903,7 +903,7 @@ After=network.target
 Type=simple
 WorkingDirectory=${WORKSPACE_PATH}
 EnvironmentFile=${ENV_FILE}
-ExecStart=$(which claude) --dangerously-load-development-channels --channels plugin:slack@y0mcp
+ExecStart=$(which claude) --dangerously-load-development-channels --channels plugin:y0slack@y0mcp
 Restart=on-failure
 RestartSec=30
 
@@ -978,7 +978,7 @@ echo "✓ y0mcp installed!"
 echo ""
 echo "Next steps in Claude Code terminal:"
 echo "  /plugin marketplace add es-ua/y0mcp"
-echo "  /plugin install slack@y0mcp"
+echo "  /plugin install y0slack@y0mcp"
 echo ""
 echo "Then create an agent:"
 echo "  bash scripts/new-agent.sh"
@@ -1029,7 +1029,7 @@ You → Slack #project-a → y0mcp → Claude Code in ~/projects/project-a
 **1. Добавить маркетплейс и установить плагин** — в Claude Code терминале:
 ```
 /plugin marketplace add es-ua/y0mcp
-/plugin install slack@y0mcp
+/plugin install y0slack@y0mcp
 ```
 
 **2. Создать Slack App** — см. [Setup Slack App](https://y0mcp.dev/guides/slack-app/)
@@ -1283,7 +1283,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
     <h2>Get started in minutes</h2>
     <pre><code># In Claude Code terminal:
 /plugin marketplace add es-ua/y0mcp
-/plugin install slack@y0mcp</code></pre>
+/plugin install y0slack@y0mcp</code></pre>
   </section>
 
   <!-- Три фичи -->
@@ -1395,7 +1395,7 @@ site/.astro/
 Скажи мне. Я:
 1. Создам Slack App и получу токены
 2. Запущу `/plugin marketplace add es-ua/y0mcp`
-3. Запущу `/plugin install slack@y0mcp`
+3. Запущу `/plugin install y0slack@y0mcp`
 4. Запущу `bash scripts/new-agent.sh` и заполню данные агента
 5. Запущу агента и сделаю pairing в Slack
 

@@ -39,7 +39,7 @@ You → Slack #project-a → y0mcp → Claude Code in ~/projects/project-a
 **1. Add marketplace and install plugin** — in Claude Code terminal:
 ```
 /plugin marketplace add es-ua/y0mcp
-/plugin install slack@y0mcp
+/plugin install y0slack@y0mcp
 ```
 
 **2. Create a Slack App** — see [Setup Slack App](https://y0mcp.dev/guides/slack-app/)

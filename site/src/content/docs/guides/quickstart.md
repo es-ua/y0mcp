@@ -16,7 +16,7 @@ In your Claude Code terminal:
 
 ```
 /plugin marketplace add es-ua/y0mcp
-/plugin install slack@y0mcp
+/plugin install y0slack@y0mcp
 ```
 
 This will:
