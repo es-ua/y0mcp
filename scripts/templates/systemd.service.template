@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 WorkingDirectory={{WORKSPACE_PATH}}
 EnvironmentFile={{ENV_FILE}}
-ExecStart={{CLAUDE_PATH}} --dangerously-load-development-channels --channels plugin:slack@y0mcp
+ExecStart={{CLAUDE_PATH}} --dangerously-load-development-channels --channels plugin:y0slack@y0mcp
 Restart=on-failure
 RestartSec=30
 

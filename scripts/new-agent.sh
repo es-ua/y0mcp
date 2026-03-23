@@ -120,7 +120,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   <array>
     <string>/bin/bash</string>
     <string>-c</string>
-    <string>source ${ENV_FILE} && cd ${WORKSPACE_PATH} && ${CLAUDE_BIN} --dangerously-load-development-channels --channels plugin:slack@y0mcp</string>
+    <string>source ${ENV_FILE} && cd ${WORKSPACE_PATH} && ${CLAUDE_BIN} --dangerously-load-development-channels --channels plugin:y0slack@y0mcp</string>
   </array>
 
   <key>WorkingDirectory</key>
@@ -166,7 +166,7 @@ After=network.target
 Type=simple
 WorkingDirectory=${WORKSPACE_PATH}
 EnvironmentFile=${ENV_FILE}
-ExecStart=$(which claude) --dangerously-load-development-channels --channels plugin:slack@y0mcp
+ExecStart=$(which claude) --dangerously-load-development-channels --channels plugin:y0slack@y0mcp
 Restart=on-failure
 RestartSec=30
 

@@ -16,7 +16,7 @@ Slack channel plugin for Claude Code.
 2. In Claude Code terminal:
    ```
    /plugin marketplace add es-ua/y0mcp
-   /plugin install slack@y0mcp
+   /plugin install y0slack@y0mcp
    ```
 3. Run `bash scripts/new-agent.sh` to create an agent
 4. Add your Slack tokens to the generated `.env` file
