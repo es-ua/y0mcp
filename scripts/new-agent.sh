@@ -9,13 +9,22 @@ echo "║     y0mcp — new agent        ║"
 echo "╚══════════════════════════════╝"
 echo ""
 
-read -p "Agent name (e.g. project-a): " AGENT_NAME
-read -p "Slack channel ID (C...): " SLACK_CHANNEL_ID
-read -p "Slack channel name (e.g. project-a): " SLACK_CHANNEL_NAME
-read -p "Project path (e.g. ~/projects/project-a): " WORKSPACE_PATH
-read -p "Dozzle URL (optional, press Enter to skip): " DOZZLE_URL
+DEFAULT_PATH="$(pwd)"
+DEFAULT_NAME="$(basename "$DEFAULT_PATH")"
 
+read -p "Agent name [$DEFAULT_NAME]: " AGENT_NAME
+AGENT_NAME="${AGENT_NAME:-$DEFAULT_NAME}"
+
+read -p "Slack channel ID (C...): " SLACK_CHANNEL_ID
+
+read -p "Slack channel name [$AGENT_NAME]: " SLACK_CHANNEL_NAME
+SLACK_CHANNEL_NAME="${SLACK_CHANNEL_NAME:-$AGENT_NAME}"
+
+read -p "Project path [$DEFAULT_PATH]: " WORKSPACE_PATH
+WORKSPACE_PATH="${WORKSPACE_PATH:-$DEFAULT_PATH}"
 WORKSPACE_PATH="${WORKSPACE_PATH/#\~/$HOME}"
+
+read -p "Dozzle URL (optional, press Enter to skip): " DOZZLE_URL
 
 # create .env
 ENV_FILE="$Y0PS_DIR/agents/$AGENT_NAME.env"
