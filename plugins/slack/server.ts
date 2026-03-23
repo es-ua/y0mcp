@@ -8,8 +8,8 @@ import { checkTokenHealth } from './token.js'
 import { getDozzleLogs } from './dozzle.js'
 
 const CHANNEL_ID = process.env.SLACK_CHANNEL_ID!
-const CHANNEL_NAME = process.env.SLACK_CHANNEL_NAME || CHANNEL_ID
 const AGENT_NAME = process.env.AGENT_NAME || 'default'
+let CHANNEL_NAME = CHANNEL_ID // resolved at startup via API
 
 const server = new Server(
   { name: 'y0mcp-slack', version: '0.1.0' },
@@ -181,6 +181,14 @@ if (tokenStatus.expiresInMinutes < 60) {
 }
 
 await app.start()
+
+// Resolve channel name from Slack API
+try {
+  const info = await app.client.conversations.info({ channel: CHANNEL_ID })
+  CHANNEL_NAME = info.channel?.name || CHANNEL_ID
+} catch {
+  console.warn(`[y0mcp] Could not resolve channel name for ${CHANNEL_ID}`)
+}
 
 // Heartbeat on start
 await app.client.chat.postMessage({

@@ -9,36 +9,93 @@ echo "║     y0mcp — new agent        ║"
 echo "╚══════════════════════════════╝"
 echo ""
 
-read -p "Agent name (e.g. project-a): " AGENT_NAME
-read -p "Slack channel ID (C...): " SLACK_CHANNEL_ID
-read -p "Slack channel name (e.g. project-a): " SLACK_CHANNEL_NAME
-read -p "Project path (e.g. ~/projects/project-a): " WORKSPACE_PATH
-read -p "Dozzle URL (optional, press Enter to skip): " DOZZLE_URL
+# helper: show value, confirm or override
+# UI output goes to stderr, only the result goes to stdout
+confirm() {
+  local label="$1" default="$2"
+  echo "$label: $default" >&2
+  read -p "  Confirm? [Y/n]: " answer
+  if [[ "$answer" =~ ^[Nn] ]]; then
+    read -p "  Enter new value: " new_value
+    echo "$new_value"
+  else
+    echo "$default"
+  fi
+}
 
+# helper: check if value is a real value (not a placeholder)
+is_set() {
+  [[ -n "$1" && "$1" != xoxb-... && "$1" != xapp-... ]]
+}
+
+# --- Detect defaults from current directory ---
+DEFAULT_PATH="$(pwd)"
+DEFAULT_NAME="$(basename "$DEFAULT_PATH")"
+
+# --- Load existing .env if present ---
+ENV_FILE="$Y0PS_DIR/agents/$DEFAULT_NAME.env"
+if [[ -f "$ENV_FILE" ]]; then
+  echo "Found existing config: $ENV_FILE"
+  echo ""
+  source "$ENV_FILE"
+fi
+
+# --- Only ask for values not already in .env ---
+
+WORKSPACE_PATH="$(confirm "Project path" "$DEFAULT_PATH")"
 WORKSPACE_PATH="${WORKSPACE_PATH/#\~/$HOME}"
 
-# create .env
+if is_set "${AGENT_NAME:-}"; then
+  echo "Agent name: $AGENT_NAME (from .env)"
+else
+  AGENT_NAME="$(confirm "Agent name" "$(basename "$WORKSPACE_PATH")")"
+fi
+
+# re-resolve env file path in case agent name changed
 ENV_FILE="$Y0PS_DIR/agents/$AGENT_NAME.env"
+if [[ -f "$ENV_FILE" ]] && [[ "$AGENT_NAME" != "$DEFAULT_NAME" ]]; then
+  source "$ENV_FILE"
+fi
+
+if is_set "${SLACK_CHANNEL_ID:-}"; then
+  echo "Slack channel ID: $SLACK_CHANNEL_ID (from .env)"
+else
+  read -p "Slack channel ID (C...): " SLACK_CHANNEL_ID
+fi
+
+if is_set "${SLACK_BOT_TOKEN:-}"; then
+  echo "Slack bot token: ****${SLACK_BOT_TOKEN: -4} (from .env)"
+else
+  read -p "Slack bot token (xoxb-...): " SLACK_BOT_TOKEN
+  SLACK_BOT_TOKEN="${SLACK_BOT_TOKEN:-xoxb-...}"
+fi
+
+if is_set "${SLACK_APP_TOKEN:-}"; then
+  echo "Slack app token: ****${SLACK_APP_TOKEN: -4} (from .env)"
+else
+  read -p "Slack app token (xapp-...): " SLACK_APP_TOKEN
+  SLACK_APP_TOKEN="${SLACK_APP_TOKEN:-xapp-...}"
+fi
+
+echo ""
+
+# --- Write .env ---
 mkdir -p "$Y0PS_DIR/agents"
 
 cat > "$ENV_FILE" << EOF
-SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN:-xoxb-...}
-SLACK_APP_TOKEN=${SLACK_APP_TOKEN:-xapp-...}
+SLACK_BOT_TOKEN=$SLACK_BOT_TOKEN
+SLACK_APP_TOKEN=$SLACK_APP_TOKEN
 SLACK_CHANNEL_ID=$SLACK_CHANNEL_ID
-SLACK_CHANNEL_NAME=$SLACK_CHANNEL_NAME
 AGENT_NAME=$AGENT_NAME
 WORKSPACE_PATH=$WORKSPACE_PATH
-${DOZZLE_URL:+DOZZLE_URL=$DOZZLE_URL}
+# DOZZLE_URL=
+# DOZZLE_TOKEN=
 EOF
 
-echo ""
-echo "✓ Created: agents/$AGENT_NAME.env"
-echo ""
-echo "Edit the file and add your Slack tokens:"
-echo "  $ENV_FILE"
+echo "✓ Saved: $ENV_FILE"
 echo ""
 
-# install launchd/systemd
+# --- Install launchd/systemd ---
 if [[ "$OSTYPE" == "darwin"* ]]; then
   PLIST="$HOME/Library/LaunchAgents/dev.y0mcp.$AGENT_NAME.plist"
 
@@ -111,7 +168,7 @@ EOF
 
   echo "✓ Created: $SERVICE"
   echo ""
-  echo "To start after adding tokens:"
+  echo "To start:"
   echo "  systemctl --user daemon-reload"
   echo "  systemctl --user enable --now y0mcp-$AGENT_NAME"
 fi

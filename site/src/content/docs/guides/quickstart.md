@@ -26,15 +26,18 @@ This will:
 
 ## Create your first agent
 
+Run from your project directory — the path and name will be auto-detected:
+
 ```bash
+cd ~/projects/my-project
 bash scripts/new-agent.sh
 ```
 
 You'll be prompted for:
-- **Agent name** — e.g., `my-project`
+- **Agent name** — defaults to current folder name
 - **Slack channel ID** — starts with `C`, find it in channel details
-- **Slack channel name** — human-readable name
-- **Project path** — where your code lives
+- **Slack channel name** — defaults to agent name
+- **Project path** — defaults to current directory
 - **Dozzle URL** — optional, for container logs
 
 ## Add Slack tokens
