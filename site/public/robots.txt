@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://y0mcp.dev/sitemap-index.xml
