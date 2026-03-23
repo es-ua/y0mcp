@@ -100,6 +100,10 @@ y0mcp/
 │       ├── permissions.ts
 │       ├── token.ts               (проверка токена)
 │       ├── dozzle.ts
+│       ├── commands/              (slash команды плагина)
+│       │   ├── new-agent.md       ← /y0mcp:new-agent
+│       │   ├── status.md          ← /y0mcp:status
+│       │   └── token-refresh.md   ← /y0mcp:token-refresh
 │       └── README.md
 │
 ├── scripts/
@@ -168,6 +172,50 @@ dist/
 
 ---
 
+## plugins/slack/commands/ — Slash команды
+
+Slash команды которые плагин регистрирует в Claude Code. Пользователь вызывает их в терминале — никакого bash, никакого git clone.
+
+### commands/new-agent.md
+
+```markdown
+---
+name: new-agent
+description: Create a new y0mcp Slack agent for a project
+---
+
+Интерактивно создаёт нового агента:
+1. Спрашивает название агента, Slack channel ID, путь к проекту, Dozzle URL
+2. Записывает .env файл
+3. Создаёт launchd plist (Mac) или systemd service (Linux)
+4. Запускает агента
+5. Выводит инструкцию по pairing
+```
+
+### commands/status.md
+
+```markdown
+---
+name: status
+description: Show status of all y0mcp agents
+---
+
+Показывает статус всех агентов: запущен/остановлен, последняя активность, статус токена.
+```
+
+### commands/token-refresh.md
+
+```markdown
+---
+name: token-refresh
+description: Manually refresh Claude OAuth token
+---
+
+Принудительно обновляет OAuth токен. Используй если агент предупредил об истечении.
+```
+
+---
+
 ## plugins/slack/plugin.json
 
 ```json
@@ -175,10 +223,15 @@ dist/
   "name": "slack",
   "version": "0.1.0",
   "description": "Slack channel plugin for Claude Code with permission relay and token refresh",
-  "author": { "name": "y0mcp", "url": "https://github.com/[owner]/y0mcp" },
+  "author": { "name": "y0mcp", "url": "https://github.com/es-ua/y0mcp" },
   "runtime": "bun",
   "main": "server.ts",
   "channel": true,
+  "commands": [
+    { "name": "new-agent",     "skill": "commands/new-agent.md" },
+    { "name": "status",        "skill": "commands/status.md" },
+    { "name": "token-refresh", "skill": "commands/token-refresh.md" }
+  ],
   "configuration": {
     "SLACK_BOT_TOKEN":    { "required": true,  "secret": true },
     "SLACK_APP_TOKEN":    { "required": true,  "secret": true },
@@ -967,14 +1020,12 @@ mkdir -p "$HOME/.y0mcp"
 echo ""
 echo "✓ y0mcp installed!"
 echo ""
-echo "Next steps:"
-echo "  1. Add Slack App tokens to your shell or agent .env files"
-echo "     See: docs/setup-slack-app.md"
+echo "Next steps in Claude Code terminal:"
+echo "  /plugin marketplace add es-ua/y0mcp"
+echo "  /plugin install y0slack@y0mcp"
+echo "  /y0mcp:new-agent"
 echo ""
-echo "  2. Create your first agent:"
-echo "     bash scripts/new-agent.sh"
-echo ""
-echo "  3. Start the agent and pair with Slack"
+echo "See: https://y0mcp.dev/guides/quickstart/"
 ```
 
 ---
@@ -1017,22 +1068,22 @@ You → Slack #project-a → y0mcp → Claude Code in ~/projects/project-a
 
 ### Quick Start
 
-```bash
-# 1. Клонировать
-git clone https://github.com/[owner]/y0mcp
-cd y0mcp
-
-# 2. Установить
-bash scripts/install.sh
-
-# 3. Создать агента
-bash scripts/new-agent.sh
-
-# 4. Добавить токены в agents/my-project.env
-
-# 5. Запустить (Mac)
-launchctl load ~/Library/LaunchAgents/dev.y0mcp.my-project.plist
+**1. Добавить маркетплейс и установить плагин** — в Claude Code терминале:
 ```
+/plugin marketplace add es-ua/y0mcp
+/plugin install y0slack@y0mcp
+```
+
+**2. Создать Slack App** — см. [Setup Slack App](https://y0mcp.dev/guides/slack-app/)
+
+**3. Создать агента** — интерактивный wizard:
+```
+/y0mcp:new-agent
+```
+
+**4. Pairing** — написать боту в Slack → получить код → `/pair ABC123` в терминале
+
+Готово. Никакого `git clone`, никаких bash скриптов.
 
 ### Permission relay
 
@@ -1059,10 +1110,9 @@ Run as many as you need. Token refresh uses file locking to prevent conflicts.
 ### Requirements
 
 - macOS or Linux
-- Claude Code CLI
+- Claude Code CLI (claude.ai login)
 - claude.ai Pro or Max subscription
 - Slack workspace (admin access to create apps)
-- Node.js 20+ and Bun
 
 ### Security
 
@@ -1266,9 +1316,10 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
   <!-- Install -->
   <section class="install">
     <h2>Get started in minutes</h2>
-    <pre><code>git clone https://github.com/[owner]/y0mcp
-cd y0mcp && bash scripts/install.sh
-bash scripts/new-agent.sh</code></pre>
+    <pre><code># In Claude Code terminal:
+/plugin marketplace add es-ua/y0mcp
+/plugin install y0slack@y0mcp
+/y0mcp:new-agent</code></pre>
   </section>
 
   <!-- Три фичи -->
@@ -1378,10 +1429,10 @@ site/.astro/
 ## Когда всё готово
 
 Скажи мне. Я:
-1. Создам Slack App
-2. Запущу `bash scripts/install.sh`
-3. Запущу `bash scripts/new-agent.sh`
-4. Заполню токены
-5. Запущу агента и сделаю pairing
+1. Создам Slack App и получу токены
+2. Запущу `/plugin marketplace add es-ua/y0mcp`
+3. Запущу `/plugin install y0slack@y0mcp`
+4. Запущу `/y0mcp:new-agent` и заполню данные агента
+5. Сделаю pairing в Slack
 
 Жди моих команд на каждом шаге.
