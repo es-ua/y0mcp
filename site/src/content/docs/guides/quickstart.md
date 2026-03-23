@@ -6,7 +6,7 @@ description: Get y0mcp up and running in minutes.
 ## Prerequisites
 
 - macOS or Linux
-- [Claude Code CLI](https://claude.ai) installed and logged in
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code/overview) installed and logged in (`npm install -g @anthropic-ai/claude-code`)
 - claude.ai Pro or Max subscription
 - Slack workspace with admin access
 
@@ -26,11 +26,25 @@ This will:
 
 ## Create your first agent
 
-Run from your project directory — the path and name will be auto-detected:
+After installing the plugin, scripts are located at `~/.claude/plugins/marketplaces/y0mcp/scripts/`.
+
+For convenience, set up an alias (add to your `~/.zshrc` or `~/.bashrc`):
+
+```bash
+alias y0mcp='bash ~/.claude/plugins/marketplaces/y0mcp/scripts'
+```
+
+Then create an agent from your project directory:
 
 ```bash
 cd ~/projects/my-project
-bash scripts/new-agent.sh
+y0mcp/new-agent.sh
+```
+
+Or run directly without the alias:
+
+```bash
+bash ~/.claude/plugins/marketplaces/y0mcp/scripts/new-agent.sh
 ```
 
 You'll be prompted for:
