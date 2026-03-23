@@ -95,6 +95,14 @@ EOF
 echo "✓ Saved: $ENV_FILE"
 echo ""
 
+# --- Resolve full path to claude CLI ---
+CLAUDE_BIN="$(which claude 2>/dev/null || echo "")"
+if [[ -z "$CLAUDE_BIN" ]]; then
+  echo "⚠️  claude not found in PATH. Please enter the full path:"
+  read -p "  Path to claude: " CLAUDE_BIN
+fi
+echo "Using claude at: $CLAUDE_BIN"
+
 # --- Install launchd/systemd ---
 if [[ "$OSTYPE" == "darwin"* ]]; then
   PLIST="$HOME/Library/LaunchAgents/dev.y0mcp.$AGENT_NAME.plist"
@@ -112,7 +120,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   <array>
     <string>/bin/bash</string>
     <string>-c</string>
-    <string>source ${ENV_FILE} && cd ${WORKSPACE_PATH} && claude --dangerously-load-development-channels --channels plugin:slack@y0mcp</string>
+    <string>source ${ENV_FILE} && cd ${WORKSPACE_PATH} && ${CLAUDE_BIN} --dangerously-load-development-channels --channels plugin:slack@y0mcp</string>
   </array>
 
   <key>WorkingDirectory</key>
