@@ -24,6 +24,8 @@ Go to **OAuth & Permissions** → **Bot Token Scopes** and add:
 
 - `channels:history`
 - `channels:read`
+- `groups:history` (private channels)
+- `groups:read` (private channels)
 - `chat:write`
 - `chat:write.public`
 - `reactions:add`
@@ -34,7 +36,8 @@ Go to **OAuth & Permissions** → **Bot Token Scopes** and add:
 
 Go to **Event Subscriptions** → Enable → **Subscribe to bot events**:
 
-- `message.channels`
+- `message.channels` (public channels)
+- `message.groups` (private channels)
 - `reaction_added`
 
 ## Install to Workspace

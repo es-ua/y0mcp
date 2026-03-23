@@ -1102,13 +1102,16 @@ Run as many as you need. Token refresh uses file locking to prevent conflicts.
 3. OAuth & Permissions → Bot Token Scopes:
    - `channels:history`
    - `channels:read`
+   - `groups:history` (private каналы)
+   - `groups:read` (private каналы)
    - `chat:write`
    - `chat:write.public`
    - `reactions:add`
    - `reactions:read`
    - `reactions:write`
 4. Event Subscriptions → Enable → Subscribe to bot events:
-   - `message.channels`
+   - `message.channels` (public каналы)
+   - `message.groups` (private каналы)
    - `reaction_added`
 5. Install to Workspace → Bot Token (`xoxb-`) → сохрани
 6. В каждом Slack канале: `/invite @имя-бота`

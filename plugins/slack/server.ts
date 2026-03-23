@@ -146,6 +146,21 @@ server.tool('reply', {
   return { content: [{ type: 'text', text: 'sent' }] }
 })
 
+// Tool: pair — complete pairing from Claude Code
+server.tool('pair', {
+  code: z.string().describe('Pairing code from Slack')
+}, async ({ code }) => {
+  const userId = await addToAllowlist(code.trim().toUpperCase())
+  if (userId) {
+    await app.client.chat.postMessage({
+      channel: CHANNEL_ID,
+      text: `✅ <@${userId}> paired successfully!`
+    })
+    return { content: [{ type: 'text', text: `Paired user ${userId}` }] }
+  }
+  return { content: [{ type: 'text', text: 'Invalid or expired pairing code' }] }
+})
+
 // Tool: react
 server.tool('react', {
   emoji: z.string(),
