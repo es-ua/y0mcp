@@ -33,6 +33,9 @@ AGENT_NAME="$(confirm "Agent name" "$(basename "$WORKSPACE_PATH")")"
 read -p "Slack channel ID (C...): " SLACK_CHANNEL_ID
 
 read -p "Dozzle URL (optional, press Enter to skip): " DOZZLE_URL
+if [[ -n "$DOZZLE_URL" ]]; then
+  read -p "Dozzle token: " DOZZLE_TOKEN
+fi
 
 # create .env
 ENV_FILE="$Y0PS_DIR/agents/$AGENT_NAME.env"
@@ -45,6 +48,7 @@ SLACK_CHANNEL_ID=$SLACK_CHANNEL_ID
 AGENT_NAME=$AGENT_NAME
 WORKSPACE_PATH=$WORKSPACE_PATH
 ${DOZZLE_URL:+DOZZLE_URL=$DOZZLE_URL}
+${DOZZLE_TOKEN:+DOZZLE_TOKEN=$DOZZLE_TOKEN}
 EOF
 
 echo ""
