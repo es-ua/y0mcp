@@ -20,9 +20,14 @@ read -p "Slack channel ID (C...): " SLACK_CHANNEL_ID
 read -p "Slack channel name [$AGENT_NAME]: " SLACK_CHANNEL_NAME
 SLACK_CHANNEL_NAME="${SLACK_CHANNEL_NAME:-$AGENT_NAME}"
 
-read -p "Project path [$DEFAULT_PATH]: " WORKSPACE_PATH
-WORKSPACE_PATH="${WORKSPACE_PATH:-$DEFAULT_PATH}"
-WORKSPACE_PATH="${WORKSPACE_PATH/#\~/$HOME}"
+echo "Project path: $DEFAULT_PATH"
+read -p "Is this correct? [Y/n]: " CONFIRM_PATH
+if [[ "$CONFIRM_PATH" =~ ^[Nn] ]]; then
+  read -p "Enter project path: " WORKSPACE_PATH
+  WORKSPACE_PATH="${WORKSPACE_PATH/#\~/$HOME}"
+else
+  WORKSPACE_PATH="$DEFAULT_PATH"
+fi
 
 read -p "Dozzle URL (optional, press Enter to skip): " DOZZLE_URL
 
