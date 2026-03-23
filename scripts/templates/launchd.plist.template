@@ -10,7 +10,7 @@
   <array>
     <string>/bin/bash</string>
     <string>-c</string>
-    <string>source {{ENV_FILE}} && cd {{WORKSPACE_PATH}} && claude --dangerously-load-development-channels --channels plugin:y0slack@y0mcp</string>
+    <string>source {{ENV_FILE}} && cd {{WORKSPACE_PATH}} && claude --dangerously-load-development-channels plugin:y0slack@y0mcp</string>
   </array>
 
   <key>WorkingDirectory</key>
