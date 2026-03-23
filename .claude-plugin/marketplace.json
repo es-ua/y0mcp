@@ -9,7 +9,7 @@
   },
   "plugins": [
     {
-      "name": "slack",
+      "name": "y0slack",
       "description": "Connect Claude Code to Slack. Permission relay, Dozzle logs, token refresh.",
       "version": "0.1.0",
       "category": "communication",
