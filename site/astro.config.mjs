@@ -9,7 +9,7 @@ export default defineConfig({
     starlight({
       title: 'y0mcp',
       description: 'Control your dev projects from Slack using your claude.ai subscription.',
-      logo: { src: './src/assets/logo.svg', alt: 'y0mcp' },
+      logo: { src: './src/assets/favicon.png', alt: 'y0mcp' },
       head: [
         { tag: 'meta', attrs: { property: 'og:image', content: 'https://y0mcp.dev/og-image.png' } },
         { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
