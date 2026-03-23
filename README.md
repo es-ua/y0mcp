@@ -106,6 +106,12 @@ y0mcp/
 └── site/                ← y0mcp.dev (Astro Starlight)
 ```
 
+## Known issues
+
+Claude Code Channels launched March 20, 2026 as a research preview. There is a known bug where `notifications/claude/channel` are not delivered to the session — this affects all channel plugins including the official Telegram plugin ([#36802](https://github.com/anthropics/claude-code/issues/36802), [#36472](https://github.com/anthropics/claude-code/issues/36472)). y0mcp will work once this is fixed upstream.
+
+Requires Claude Code v2.1.80+ and `--dangerously-load-development-channels` flag until accepted to the marketplace.
+
 ## Roadmap
 
 - **v1**: Slack + permission relay + always-on ← now
