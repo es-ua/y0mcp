@@ -10,11 +10,11 @@ import { handlePermissionRelay, resolvePermission } from './permissions.js'
 import { checkTokenHealth } from './token.js'
 import { getDozzleLogs } from './dozzle.js'
 
-// Load .env from working directory (the project where Claude Code runs)
-function loadEnv() {
+// Load .env — check ~/.claude/channels/y0slack/.env first (official convention),
+// then fall back to project .env
+function loadEnvFile(path: string) {
   try {
-    const envPath = resolve(process.cwd(), '.env')
-    const content = readFileSync(envPath, 'utf-8')
+    const content = readFileSync(path, 'utf-8')
     for (const line of content.split('\n')) {
       const trimmed = line.trim()
       if (!trimmed || trimmed.startsWith('#')) continue
@@ -22,7 +22,6 @@ function loadEnv() {
       if (eq === -1) continue
       const key = trimmed.slice(0, eq).trim()
       let val = trimmed.slice(eq + 1).trim()
-      // strip quotes
       if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
         val = val.slice(1, -1)
       }
@@ -30,7 +29,14 @@ function loadEnv() {
     }
   } catch {}
 }
-loadEnv()
+
+import { homedir } from 'os'
+import { join } from 'path'
+
+// Official plugin data path (written by /y0slack:configure skill)
+loadEnvFile(join(homedir(), '.claude', 'channels', 'y0slack', '.env'))
+// Project-local .env as fallback
+loadEnvFile(resolve(process.cwd(), '.env'))
 
 const CHANNEL_ID = process.env.SLACK_CHANNEL_ID!
 const AGENT_NAME = process.env.AGENT_NAME || 'default'
@@ -43,7 +49,7 @@ const warn = (...args: unknown[]) => console.error('[y0mcp] ⚠️', ...args)
 // Validate required env vars
 for (const key of ['SLACK_BOT_TOKEN', 'SLACK_APP_TOKEN', 'SLACK_CHANNEL_ID']) {
   if (!process.env[key]) {
-    console.error(`[y0mcp] FATAL: ${key} is not set. Add it to .env in your project directory.`)
+    console.error(`[y0mcp] FATAL: ${key} is not set. Run /y0slack:configure or add it to ~/.claude/channels/y0slack/.env`)
     process.exit(1)
   }
 }

@@ -2,7 +2,8 @@ import { readFile, writeFile, mkdir } from 'fs/promises'
 import { homedir } from 'os'
 import { join } from 'path'
 
-const dir = join(homedir(), '.y0mcp', process.env.AGENT_NAME || 'default')
+const agentName = process.env.AGENT_NAME || 'default'
+const dir = join(homedir(), '.claude', 'channels', 'y0slack', agentName)
 const file = join(dir, 'access.json')
 
 interface Access {
