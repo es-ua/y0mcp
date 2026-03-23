@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
 import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { App } from '@slack/bolt'
@@ -7,6 +9,28 @@ import { handlePermissionRelay, resolvePermission } from './permissions.js'
 import { checkTokenHealth } from './token.js'
 import { getDozzleLogs } from './dozzle.js'
 
+// Load .env from working directory (the project where Claude Code runs)
+function loadEnv() {
+  try {
+    const envPath = resolve(process.cwd(), '.env')
+    const content = readFileSync(envPath, 'utf-8')
+    for (const line of content.split('\n')) {
+      const trimmed = line.trim()
+      if (!trimmed || trimmed.startsWith('#')) continue
+      const eq = trimmed.indexOf('=')
+      if (eq === -1) continue
+      const key = trimmed.slice(0, eq).trim()
+      let val = trimmed.slice(eq + 1).trim()
+      // strip quotes
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1)
+      }
+      if (!process.env[key]) process.env[key] = val
+    }
+  } catch {}
+}
+loadEnv()
+
 const CHANNEL_ID = process.env.SLACK_CHANNEL_ID!
 const AGENT_NAME = process.env.AGENT_NAME || 'default'
 let CHANNEL_NAME = CHANNEL_ID // resolved at startup via API
@@ -14,6 +38,14 @@ let CHANNEL_NAME = CHANNEL_ID // resolved at startup via API
 // MCP uses stdout for JSON-RPC — all logs must go to stderr
 const log = (...args: unknown[]) => console.error('[y0mcp]', ...args)
 const warn = (...args: unknown[]) => console.error('[y0mcp] ⚠️', ...args)
+
+// Validate required env vars
+for (const key of ['SLACK_BOT_TOKEN', 'SLACK_APP_TOKEN', 'SLACK_CHANNEL_ID']) {
+  if (!process.env[key]) {
+    console.error(`[y0mcp] FATAL: ${key} is not set. Add it to .env in your project directory.`)
+    process.exit(1)
+  }
+}
 
 const server = new Server(
   { name: 'y0mcp-slack', version: '0.1.0' },
