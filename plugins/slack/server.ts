@@ -11,6 +11,10 @@ const CHANNEL_ID = process.env.SLACK_CHANNEL_ID!
 const AGENT_NAME = process.env.AGENT_NAME || 'default'
 let CHANNEL_NAME = CHANNEL_ID // resolved at startup via API
 
+// MCP uses stdout for JSON-RPC — all logs must go to stderr
+const log = (...args: unknown[]) => console.error('[y0mcp]', ...args)
+const warn = (...args: unknown[]) => console.error('[y0mcp] ⚠️', ...args)
+
 const server = new Server(
   { name: 'y0mcp-slack', version: '0.1.0' },
   {
@@ -33,6 +37,16 @@ const app = new App({
   token: process.env.SLACK_BOT_TOKEN!,
   appToken: process.env.SLACK_APP_TOKEN!,
   socketMode: true,
+  // Bolt logs to stdout by default — redirect to stderr to avoid corrupting MCP transport
+  logger: {
+    debug: (...args: unknown[]) => {},
+    info: (...args: unknown[]) => console.error('[bolt]', ...args),
+    warn: (...args: unknown[]) => console.error('[bolt]', ...args),
+    error: (...args: unknown[]) => console.error('[bolt]', ...args),
+    setLevel: () => {},
+    getLevel: () => 'info' as any,
+    setName: () => {},
+  },
 })
 
 let currentTs: string | undefined
@@ -55,7 +69,7 @@ app.message(async ({ message }) => {
       channel: CHANNEL_ID,
       text: `Pairing request from <@${userId}>.\nEnter in Claude Code terminal: \`/pair ${code}\``,
     })
-    console.log(`[y0mcp] Pairing: /pair ${code}`)
+    log(`Pairing: /pair ${code}`)
     return
   }
 
@@ -177,7 +191,7 @@ await loadAccess()
 // Check token health on start
 const tokenStatus = await checkTokenHealth()
 if (tokenStatus.expiresInMinutes < 60) {
-  console.warn(`[y0mcp] ⚠️ Token expires in ${tokenStatus.expiresInMinutes} minutes`)
+  warn(`Token expires in ${tokenStatus.expiresInMinutes} minutes`)
 }
 
 await app.start()
@@ -187,7 +201,7 @@ try {
   const info = await app.client.conversations.info({ channel: CHANNEL_ID })
   CHANNEL_NAME = info.channel?.name || CHANNEL_ID
 } catch {
-  console.warn(`[y0mcp] Could not resolve channel name for ${CHANNEL_ID}`)
+  warn(`Could not resolve channel name for ${CHANNEL_ID}`)
 }
 
 // Heartbeat on start
@@ -202,10 +216,10 @@ await app.client.chat.postMessage({
   mrkdwn: true
 })
 
-console.log(`[y0mcp] ✓ Agent: ${AGENT_NAME}`)
-console.log(`[y0mcp] ✓ Channel: #${CHANNEL_NAME}`)
-console.log(`[y0mcp] ✓ Permission relay: enabled`)
-console.log(`[y0mcp] Token expires in: ${tokenStatus.expiresInMinutes} min`)
+log(`✓ Agent: ${AGENT_NAME}`)
+log(`✓ Channel: #${CHANNEL_NAME}`)
+log(`✓ Permission relay: enabled`)
+log(`Token expires in: ${tokenStatus.expiresInMinutes} min`)
 
 // Heartbeat on shutdown
 process.on('SIGTERM', async () => {
