@@ -21,7 +21,8 @@ GitHub: `github.com/[owner]/y0mcp`
 y0mcp/
 ├── CLAUDE.md
 ├── README.md                  ← обзор экосистемы y0mcp
-├── marketplace.json           ← каталог всех плагинов
+├── .claude-plugin/
+│   └── marketplace.json       ← каталог плагинов для маркетплейса
 ├── plugins/
 │   ├── y0slack/               ← Slack channel plugin (v1)
 │   ├── y0discord/             ← future
@@ -88,7 +89,8 @@ y0mcp/
 ├── README.md
 ├── LICENSE                        (MIT)
 ├── CLAUDE.md                      (этот файл)
-├── marketplace.json
+├── .claude-plugin/
+│   └── marketplace.json           ← каталог плагинов для маркетплейса
 │
 ├── plugins/
 │   └── slack/
@@ -139,22 +141,29 @@ dist/
 
 ---
 
-## marketplace.json
+## .claude-plugin/marketplace.json
 
 ```json
 {
   "name": "y0mcp",
+  "version": "0.1.0",
+  "description": "Slack channel plugin for Claude Code. Multi-project, permission relay, always-on.",
   "owner": {
     "name": "y0mcp",
+    "email": "",
     "url": "https://github.com/[owner]/y0mcp"
   },
-  "description": "Slack channel plugin for Claude Code. Multi-project, permission relay, always-on.",
   "plugins": [
     {
       "name": "slack",
       "description": "Connect Claude Code to Slack. Permission relay, Dozzle logs, token refresh.",
+      "version": "0.1.0",
       "category": "communication",
       "tags": ["slack", "channels", "multi-project", "devops", "permissions"],
+      "author": {
+        "name": "y0mcp",
+        "url": "https://github.com/[owner]/y0mcp"
+      },
       "source": {
         "source": "git-subdir",
         "url": "https://github.com/[owner]/y0mcp.git",
