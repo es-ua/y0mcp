@@ -10,7 +10,6 @@
     "SLACK_BOT_TOKEN":    { "required": true,  "secret": true },
     "SLACK_APP_TOKEN":    { "required": true,  "secret": true },
     "SLACK_CHANNEL_ID":   { "required": true  },
-    "SLACK_CHANNEL_NAME": { "required": false },
     "AGENT_NAME":         { "required": false },
     "DOZZLE_URL":         { "required": false },
     "DOZZLE_TOKEN":       { "required": false, "secret": true }
