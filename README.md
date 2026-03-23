@@ -36,22 +36,29 @@ You → Slack #project-a → y0mcp → Claude Code in ~/projects/project-a
 
 ## Quick Start
 
-```bash
-# 1. Clone
-git clone https://github.com/es-ua/y0mcp
-cd y0mcp
-
-# 2. Install
-bash scripts/install.sh
-
-# 3. Create an agent
-bash scripts/new-agent.sh
-
-# 4. Add tokens to agents/my-project.env
-
-# 5. Start (Mac)
-launchctl load ~/Library/LaunchAgents/dev.y0mcp.my-project.plist
+**1. Add marketplace and install plugin** — in Claude Code terminal:
 ```
+/plugin marketplace add es-ua/y0mcp
+/plugin install slack@y0mcp
+```
+
+**2. Create a Slack App** — see [Setup Slack App](https://y0mcp.dev/guides/slack-app/)
+
+**3. Create an agent:**
+```bash
+bash scripts/new-agent.sh
+```
+
+**4. Start:**
+```bash
+# Mac
+launchctl load ~/Library/LaunchAgents/dev.y0mcp.my-project.plist
+
+# Linux
+systemctl --user enable --now y0mcp-my-project
+```
+
+**5. Pair** — message the bot in Slack → get code → `/pair CODE` in terminal
 
 ## Permission relay
 
@@ -78,10 +85,9 @@ Run as many as you need. Token refresh uses file locking to prevent conflicts.
 ## Requirements
 
 - macOS or Linux
-- Claude Code CLI
+- Claude Code CLI (claude.ai login)
 - claude.ai Pro or Max subscription
 - Slack workspace (admin access to create apps)
-- Node.js 20+ and Bun
 
 ## Security
 

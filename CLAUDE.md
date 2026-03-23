@@ -967,14 +967,14 @@ mkdir -p "$HOME/.y0mcp"
 echo ""
 echo "✓ y0mcp installed!"
 echo ""
-echo "Next steps:"
-echo "  1. Add Slack App tokens to your shell or agent .env files"
-echo "     See: docs/setup-slack-app.md"
+echo "Next steps in Claude Code terminal:"
+echo "  /plugin marketplace add es-ua/y0mcp"
+echo "  /plugin install slack@y0mcp"
 echo ""
-echo "  2. Create your first agent:"
-echo "     bash scripts/new-agent.sh"
+echo "Then create an agent:"
+echo "  bash scripts/new-agent.sh"
 echo ""
-echo "  3. Start the agent and pair with Slack"
+echo "See: https://y0mcp.dev/guides/quickstart/"
 ```
 
 ---
@@ -1017,22 +1017,29 @@ You → Slack #project-a → y0mcp → Claude Code in ~/projects/project-a
 
 ### Quick Start
 
-```bash
-# 1. Клонировать
-git clone https://github.com/[owner]/y0mcp
-cd y0mcp
-
-# 2. Установить
-bash scripts/install.sh
-
-# 3. Создать агента
-bash scripts/new-agent.sh
-
-# 4. Добавить токены в agents/my-project.env
-
-# 5. Запустить (Mac)
-launchctl load ~/Library/LaunchAgents/dev.y0mcp.my-project.plist
+**1. Добавить маркетплейс и установить плагин** — в Claude Code терминале:
 ```
+/plugin marketplace add es-ua/y0mcp
+/plugin install slack@y0mcp
+```
+
+**2. Создать Slack App** — см. [Setup Slack App](https://y0mcp.dev/guides/slack-app/)
+
+**3. Создать агента:**
+```bash
+bash scripts/new-agent.sh
+```
+
+**4. Запустить:**
+```bash
+# Mac
+launchctl load ~/Library/LaunchAgents/dev.y0mcp.my-project.plist
+
+# Linux
+systemctl --user enable --now y0mcp-my-project
+```
+
+**5. Pairing** — написать боту в Slack → получить код → `/pair ABC123` в терминале
 
 ### Permission relay
 
@@ -1059,10 +1066,9 @@ Run as many as you need. Token refresh uses file locking to prevent conflicts.
 ### Requirements
 
 - macOS or Linux
-- Claude Code CLI
+- Claude Code CLI (claude.ai login)
 - claude.ai Pro or Max subscription
 - Slack workspace (admin access to create apps)
-- Node.js 20+ and Bun
 
 ### Security
 
@@ -1266,9 +1272,9 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
   <!-- Install -->
   <section class="install">
     <h2>Get started in minutes</h2>
-    <pre><code>git clone https://github.com/[owner]/y0mcp
-cd y0mcp && bash scripts/install.sh
-bash scripts/new-agent.sh</code></pre>
+    <pre><code># In Claude Code terminal:
+/plugin marketplace add es-ua/y0mcp
+/plugin install slack@y0mcp</code></pre>
   </section>
 
   <!-- Три фичи -->
@@ -1378,10 +1384,10 @@ site/.astro/
 ## Когда всё готово
 
 Скажи мне. Я:
-1. Создам Slack App
-2. Запущу `bash scripts/install.sh`
-3. Запущу `bash scripts/new-agent.sh`
-4. Заполню токены
-5. Запущу агента и сделаю pairing
+1. Создам Slack App и получу токены
+2. Запущу `/plugin marketplace add es-ua/y0mcp`
+3. Запущу `/plugin install slack@y0mcp`
+4. Запущу `bash scripts/new-agent.sh` и заполню данные агента
+5. Запущу агента и сделаю pairing в Slack
 
 Жди моих команд на каждом шаге.

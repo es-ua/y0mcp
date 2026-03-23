@@ -6,24 +6,23 @@ description: Get y0mcp up and running in minutes.
 ## Prerequisites
 
 - macOS or Linux
-- [Claude Code CLI](https://claude.ai) installed
+- [Claude Code CLI](https://claude.ai) installed and logged in
 - claude.ai Pro or Max subscription
 - Slack workspace with admin access
-- Node.js 20+ and [Bun](https://bun.sh)
 
-## Install
+## Install the plugin
 
-```bash
-git clone https://github.com/es-ua/y0mcp
-cd y0mcp
-bash scripts/install.sh
+In your Claude Code terminal:
+
+```
+/plugin marketplace add es-ua/y0mcp
+/plugin install slack@y0mcp
 ```
 
-The installer will:
-1. Check for Claude Code and Bun (install if missing)
-2. Install plugin dependencies
-3. Verify Claude authentication
-4. Set up automatic token refresh
+This will:
+1. Add the y0mcp marketplace to Claude Code
+2. Install the Slack channel plugin with all dependencies
+3. Set up automatic token refresh
 
 ## Create your first agent
 
