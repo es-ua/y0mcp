@@ -9,25 +9,30 @@ echo "║     y0mcp — new agent        ║"
 echo "╚══════════════════════════════╝"
 echo ""
 
+# helper: show default, confirm or override
+confirm() {
+  local label="$1" default="$2"
+  echo "$label: $default"
+  read -p "  Confirm? [Y/n]: " answer
+  if [[ "$answer" =~ ^[Nn] ]]; then
+    read -p "  Enter new value: " new_value
+    echo "$new_value"
+  else
+    echo "$default"
+  fi
+}
+
 DEFAULT_PATH="$(pwd)"
 DEFAULT_NAME="$(basename "$DEFAULT_PATH")"
 
-read -p "Agent name [$DEFAULT_NAME]: " AGENT_NAME
-AGENT_NAME="${AGENT_NAME:-$DEFAULT_NAME}"
+WORKSPACE_PATH="$(confirm "Project path" "$DEFAULT_PATH")"
+WORKSPACE_PATH="${WORKSPACE_PATH/#\~/$HOME}"
+
+AGENT_NAME="$(confirm "Agent name" "$(basename "$WORKSPACE_PATH")")"
 
 read -p "Slack channel ID (C...): " SLACK_CHANNEL_ID
 
-read -p "Slack channel name [$AGENT_NAME]: " SLACK_CHANNEL_NAME
-SLACK_CHANNEL_NAME="${SLACK_CHANNEL_NAME:-$AGENT_NAME}"
-
-echo "Project path: $DEFAULT_PATH"
-read -p "Is this correct? [Y/n]: " CONFIRM_PATH
-if [[ "$CONFIRM_PATH" =~ ^[Nn] ]]; then
-  read -p "Enter project path: " WORKSPACE_PATH
-  WORKSPACE_PATH="${WORKSPACE_PATH/#\~/$HOME}"
-else
-  WORKSPACE_PATH="$DEFAULT_PATH"
-fi
+SLACK_CHANNEL_NAME="$(confirm "Slack channel name" "$AGENT_NAME")"
 
 read -p "Dozzle URL (optional, press Enter to skip): " DOZZLE_URL
 
